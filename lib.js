@@ -1,6 +1,5 @@
 // Sprawdza czy wartoć jest obiektem, jeli jest wypluwa true. Drugi argument pozwala wykluczyć tablice, funkcje, lub oba typy.
 export const isObject = (val, config = '_ALL') => {
-  let result;
   switch (config) {
     case '_ALL':
       return (result = val === Object(val));
@@ -20,14 +19,17 @@ export const isObject = (val, config = '_ALL') => {
     default:
       throw new Error('Wrong second argument passed');
   }
-  return result;
 };
 
 // Zwraca nową instancję zmiennej przesłanej jako argument.
 export const copy = val => {
-  let newEl;
-  isObject(val) ? (newEl = Object.assign({}, val)) : (newEl = val);
-  return newEl;
+  const copy = val => {
+    if (isObject(val)) {
+      return Object.assign({}, val);
+    } else {
+      return val;
+    }
+  };
 };
 
 /* export const isObjectPropertiesEqual = (
