@@ -11,25 +11,28 @@ export const isObject = (val, config = '_ALL') => {
       return (result =
         val === Object(val) &&
         Object.prototype.toString.call(val) !== '[object Function]');
+    case 'noDate':
+      return (result =
+        val === Object(val) &&
+        Object.prototype.toString.call(val) !== '[object Date]');
     case 'pureObj':
       return (result =
         val === Object(val) &&
         Object.prototype.toString.call(val) !== '[object Array]' &&
-        Object.prototype.toString.call(val) !== '[object Function]');
+        Object.prototype.toString.call(val) !== '[object Function]' &&
+        Object.prototype.toString.call(val) !== '[object Date]');
     default:
       throw new Error('Wrong second argument passed');
   }
 };
 
 // Zwraca nową instancję zmiennej przesłanej jako argument.
-export const copy = val => {
-  const copy = val => {
-    if (isObject(val)) {
-      return Object.assign({}, val);
-    } else {
-      return val;
-    }
-  };
+export const clone = val => {
+  return isObject(val, 'pureObj')
+    ? Object.assign({}, val)
+    : Object.prototype.toString.call(val) === '[object Date]' // TODO deep cloning
+      ? new Date(val.getTime())
+      : val;
 };
 
 /* export const isObjectPropertiesEqual = (
@@ -56,7 +59,7 @@ export const findAndChange = (arr, find, changeTo) => {
  */
 const lib = {
   isObject: isObject(val, config),
-  copy: copy(val)
+  clone: clone(val)
 };
 
 export default lib;
