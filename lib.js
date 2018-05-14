@@ -1,28 +1,36 @@
-// Sprawdza czy wartoć jest obiektem, jeli jest wypluwa true. Drugi argument pozwala wykluczyć tablice, funkcje, lub oba typy.
-export const isObject = (val, config = '_ALL') => {
-  switch (config) {
-    case '_ALL':
-      return (result = val === Object(val));
-    case 'noArr':
-      return (result =
-        val === Object(val) &&
-        Object.prototype.toString.call(val) !== '[object Array]');
-    case 'noFunc':
-      return (result =
-        val === Object(val) &&
-        Object.prototype.toString.call(val) !== '[object Function]');
-    case 'noDate':
-      return (result =
-        val === Object(val) &&
-        Object.prototype.toString.call(val) !== '[object Date]');
-    case 'pureObj':
-      return (result =
-        val === Object(val) &&
-        Object.prototype.toString.call(val) !== '[object Array]' &&
-        Object.prototype.toString.call(val) !== '[object Function]' &&
-        Object.prototype.toString.call(val) !== '[object Date]');
-    default:
-      throw new Error('Wrong second argument passed');
+// Sprawdza czy wartoć jest obiektem, jeli jest wypluwa true. Drugi argument pozwala wykluczyć wybrane obiekty.
+export const isObject = (val, ...config) => {
+  if (config.length > 0) {
+    //TOD: check args
+    if (val !== Object(val)) return false;
+    const optList = [
+      'Object',
+      'Array',
+      'Function',
+      'Date',
+      'RegExp',
+      'String',
+      'Number',
+      'Boolean',
+      'Error',
+      'Math',
+      'JSON',
+      'Arguments'
+    ];
+    for (let i = 0; i < config.length; i++) {
+      const conf =
+        config[i][0].toUpperCase() + config[i].slice(1).toLowerCase();
+      if (!optList.includes(conf))
+        throw `Wrong argument "${
+          config[i]
+        }" passed to isObject function. Available arguments: "${optList}"`;
+      if (Object.prototype.toString.call(val) === `[object ${conf}]`) {
+        return false;
+      }
+    }
+    return true;
+  } else {
+    return val === Object(val);
   }
 };
 
@@ -58,7 +66,7 @@ export const findAndChange = (arr, find, changeTo) => {
 };
  */
 const lib = {
-  isObject: isObject(val, config),
+  isObject: isObject(val, ...config),
   clone: clone(val)
 };
 
