@@ -1,7 +1,6 @@
 // Sprawdza czy wartoć jest obiektem, jeli jest wypluwa true. Drugi argument pozwala wykluczyć wybrane obiekty.
 export const isObject = (val, ...config) => {
   if (config.length > 0) {
-    //TOD: check args
     if (val !== Object(val)) return false;
     const optList = [
       'Object',
@@ -32,6 +31,28 @@ export const isObject = (val, ...config) => {
   } else {
     return val === Object(val);
   }
+};
+
+//Sprawdza czy wartosc podana jako pierwszy argument jest typu podanego w drugim argumencie.
+export const is = (val, type) => {
+  if (!type || !val) throw 'No arg passed.';
+  type = type[0].toUpperCase() + type.slice(1).toLowerCase;
+  const optList = [
+    'Object',
+    'Array',
+    'Function',
+    'Date',
+    'RegExp',
+    'String',
+    'Number',
+    'Boolean',
+    'Error',
+    'Math',
+    'JSON',
+    'Arguments'
+  ];
+  if (!optList.includes(type)) throw 'Wrong second arg passed';
+  return Object.prototype.toString.call(val) === `[object ${type}]`;
 };
 
 // Zwraca nową instancję zmiennej przesłanej jako argument.
@@ -67,6 +88,7 @@ export const findAndChange = (arr, find, changeTo) => {
  */
 const lib = {
   isObject: isObject(val, ...config),
+  is: is(val, type),
   clone: clone(val)
 };
 
