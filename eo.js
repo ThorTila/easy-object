@@ -36,12 +36,21 @@ export const is = (val, type) => {
 
 // Zwraca nową instancję zmiennej przesłanej jako argument.
 export const clone = val => {
-  return isObject(val, 'pureObj')
-    ? Object.assign({}, val)
-    : Object.prototype.toString.call(val) === '[object Date]' // TODO deep cloning
-      ? new Date(val.getTime())
-      : val;
+  if (!val) throw 'No arg passed to "clone" func.';
+  switch (Object.prototype.toString.call(val)) {
+    case '[object Object]':
+      return Object.assign({}, val);
+    case '[object Array]':
+      return [...val];
+    case '[object Date]':
+      return new Date(val.valueOf());
+    default:
+      return val;
+  }
 };
+
+// Wykonuje głębokie klonowanie zmiennej przesłanej jako argument.
+export const cloneDeep = val => {};
 
 /* export const isObjectPropertiesEqual = (
   object1,
@@ -68,7 +77,8 @@ export const findAndChange = (arr, find, changeTo) => {
 const lib = {
   isObject: isObject(val, ...config),
   is: is(val, type),
-  clone: clone(val)
+  clone: clone(val),
+  cloneDeep: cloneDeep(val)
 };
 
 export default lib;
