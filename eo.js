@@ -50,7 +50,27 @@ export const clone = val => {
 };
 
 // Wykonuje głębokie klonowanie zmiennej przesłanej jako argument.
-export const cloneDeep = val => {};
+export const cloneDeep = val => {
+  if (!val) throw 'No arg passed to "cloneDeep" func.';
+  let newVal = clone(val);
+  switch (Object.prototype.toString.call(newVal)) {
+    case '[object Object]':
+      return 'object';
+    case '[object Array]':
+      newVal.forEach((el, id) => {
+        if (
+          Object.prototype.toString.call(el) === '[object Object]' ||
+          Object.prototype.toString.call(el) === '[object Array]'
+        ) {
+          newVal[id] = cloneDeep(el);
+        }
+      });
+      return newVal;
+    default:
+      return 'default';
+  }
+  return newVal;
+};
 
 /* export const isObjectPropertiesEqual = (
   object1,
