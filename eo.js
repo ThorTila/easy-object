@@ -55,7 +55,15 @@ export const cloneDeep = val => {
   let newVal = clone(val);
   switch (Object.prototype.toString.call(newVal)) {
     case '[object Object]':
-      return 'object';
+      for (const prop in newVal) {
+        if (
+          Object.prototype.toString.call(newVal[prop]) === '[object Object]' ||
+          Object.prototype.toString.call(newVal[prop]) === '[object Array]'
+        ) {
+          newVal[prop] = cloneDeep(newVal[prop]);
+        }
+      }
+      return newVal;
     case '[object Array]':
       newVal.forEach((el, id) => {
         if (
@@ -67,9 +75,8 @@ export const cloneDeep = val => {
       });
       return newVal;
     default:
-      return 'default';
+      return newVal;
   }
-  return newVal;
 };
 
 /* export const isObjectPropertiesEqual = (
