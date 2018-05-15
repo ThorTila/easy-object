@@ -2,30 +2,8 @@
 export const isObject = (val, ...config) => {
   if (config.length > 0) {
     if (val !== Object(val)) return false;
-    const optList = [
-      'Object',
-      'Array',
-      'Function',
-      'Date',
-      'RegExp',
-      'String',
-      'Number',
-      'Boolean',
-      'Error',
-      'Math',
-      'JSON',
-      'Arguments'
-    ];
     for (let i = 0; i < config.length; i++) {
-      const conf =
-        config[i][0].toUpperCase() + config[i].slice(1).toLowerCase();
-      if (!optList.includes(conf))
-        throw `Wrong argument "${
-          config[i]
-        }" passed to isObject function. Available arguments: "${optList}"`;
-      if (Object.prototype.toString.call(val) === `[object ${conf}]`) {
-        return false;
-      }
+      if (is(val, config[i])) return false;
     }
     return true;
   } else {
@@ -35,8 +13,8 @@ export const isObject = (val, ...config) => {
 
 //Sprawdza czy wartosc podana jako pierwszy argument jest typu podanego w drugim argumencie.
 export const is = (val, type) => {
-  if (!type || !val) throw 'No arg passed.';
-  type = type[0].toUpperCase() + type.slice(1).toLowerCase;
+  if (!type || !val) throw 'No arg passed to "is" function.';
+  type = type[0].toUpperCase() + type.slice(1).toLowerCase();
   const optList = [
     'Object',
     'Array',
@@ -51,7 +29,8 @@ export const is = (val, type) => {
     'JSON',
     'Arguments'
   ];
-  if (!optList.includes(type)) throw 'Wrong second arg passed';
+  if (!optList.includes(type))
+    throw `Wrong argument "${type}" passed to "is" function. Available arguments: "${optList}"`;
   return Object.prototype.toString.call(val) === `[object ${type}]`;
 };
 
