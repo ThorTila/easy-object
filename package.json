@@ -4,12 +4,24 @@
   "description": "",
   "main": "eo.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "ava"
   },
   "author": "Łukasz Rasiński",
   "license": "ISC",
-  "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0"
+  "devDependencies": {},
+  "dependencies": {
+    "@babel/preset-env": "^7.0.0-beta.47",
+    "@babel/register": "^7.0.0-beta.47",
+    "ava": "^1.0.0-beta.4"
+  },
+  "ava": {
+    "require": [
+      "@babel/register"
+    ],
+    "babel": {
+      "testOptions": {
+        "babelrc": true
+      }
+    }
   }
 }

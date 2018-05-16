@@ -4,7 +4,6 @@ const objectType = '[object Object]',
 
 // Sprawdza czy wartoć jest obiektem, jeli jest wypluwa true. Drugi argument pozwala wykluczyć wybrane obiekty.
 export const isObject = (val, ...config) => {
-  if (!val) throw 'No arg passed to "isObject" func.';
   if (config.length > 0) {
     if (val !== Object(val)) return false;
     for (let i = 0; i < config.length; i++) {
@@ -32,7 +31,7 @@ export const is = (val, type) => {
     'Error',
     'Math',
     'JSON',
-    'Arguments'
+    'Arguments',
   ];
   if (!optList.includes(type))
     throw `Wrong argument "${type}" passed to "is" function. Available arguments: "${optList}"`;
@@ -117,35 +116,9 @@ export const isEqual = (val1, val2) => {
       throw 'Wrong argument type passed to isEqual Func';
   }
 };
-/* export const isObjectPropertiesEqual = (
-  object1,
-  object2,
-  property = '_ALL'
-) => {
-  switch (property) {
-    case '_ALL':
-      return true;
-    case typeof property === 'array':
-      return true;
-    default:
-      return true;
-  }
-};
 
-export const findAndChange = (arr, find, changeTo) => {
-  const newArr = arr.map(el => {
-    let newEl;
-    isObject(el) ? (newEl = Object.assign({}, el)) : (newEl = el);
-  });
-};
- */
 const lib = {
-  isObject: isObject(val, ...config),
-  is: is(val, type),
-  dataType: dataType(val),
-  clone: clone(val),
-  cloneDeep: cloneDeep(val),
-  isEqual: isEqual(val1, val2)
+  isObject: (val, config = []) => isObject(val, ...config),
 };
 
 export default lib;
