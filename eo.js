@@ -2,6 +2,11 @@ const objectType = '[object Object]',
   arrayType = '[object Array]',
   dateType = '[object Date]';
 
+// Zwraca typ danych wysłanych do funkcji w formacie '[object typ]'.
+export const dataType = val => {
+  return Object.prototype.toString.call(val);
+};
+
 // Sprawdza czy wartoć jest obiektem, jeli jest wypluwa true. Drugi argument pozwala wykluczyć wybrane obiekty.
 export const isObject = (val, ...config) => {
   if (config.length > 0) {
@@ -31,15 +36,11 @@ export const is = (val, type) => {
     'Error',
     'Math',
     'JSON',
-    'Arguments',
+    'Arguments'
   ];
   if (!optList.includes(type))
     throw `Wrong argument "${type}" passed to "is" function. Available arguments: "${optList}"`;
   return dataType(val) === `[object ${type}]`;
-};
-
-export const dataType = val => {
-  return Object.prototype.toString.call(val);
 };
 
 // Zwraca nową instancję zmiennej przesłanej jako argument.
@@ -84,7 +85,7 @@ export const cloneDeep = val => {
   }
 };
 
-// Porównuje dwie wartosci wysłane w argumentach i jesli są równe wypluwa true. Radzi sobie z prymitywami, tablicami i obiektami(niedługo).
+// Porównuje dwie wartosci wysłane w argumentach i jesli są równe wypluwa true. Radzi sobie z prymitywami, tablicami, obiektami i datami.
 export const isEqual = (val1, val2) => {
   if (!val1 || !val2) throw 'No arg passed to "isEqual" func.';
   if (dataType(val1) !== dataType(val2))
@@ -95,7 +96,21 @@ export const isEqual = (val1, val2) => {
   switch (dataType(val1)) {
     case objectType:
       if (Object.keys(val1).length !== Object.keys(val2).length) return false;
-      return 'object';
+      for (const prop in val1) {
+        if (!val2.hasOwnProperty(prop)) return false;
+        if (
+          dataType(val1[prop]) === objectType ||
+          dataType(val1[prop]) === arrayType
+        ) {
+          if (isEqual(val1[prop], val2[prop])) {
+            continue;
+          } else {
+            return false;
+          }
+        }
+        if (val1[prop] !== val2[prop]) return false;
+      }
+      return true;
     case arrayType:
       if (val1.length !== val2.length) return false;
       for (let i = 0; i < val1.length; i++) {
@@ -112,13 +127,23 @@ export const isEqual = (val1, val2) => {
         if (val1[i] !== val2[i]) return false;
       }
       return true;
+    case dateType:
+      if (val1.getTime() === val2.getTime()) return true;
+      else return false;
     default:
       throw 'Wrong argument type passed to isEqual Func';
   }
 };
 
+/* export const findAndChange = (arr, find, changeTo) => {
+  const newArr = arr.map(el => {
+    let newEl;
+    isObject(el) ? (newEl = Object.assign({}, el)) : (newEl = el);
+  });
+}; */
+
 const lib = {
-  isObject: (val, config = []) => isObject(val, ...config),
+  isObject: (val, config = []) => isObject(val, ...config)
 };
 
 export default lib;
