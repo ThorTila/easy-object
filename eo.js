@@ -1,6 +1,7 @@
 const objectType = '[object Object]',
   arrayType = '[object Array]',
-  dateType = '[object Date]';
+  dateType = '[object Date]',
+  functionType = '[object Function]';
 
 // Zwraca typ danych wysłanych do funkcji w formacie '[object typ]'.
 export const dataType = val => {
@@ -22,7 +23,8 @@ export const isObject = (val, ...config) => {
 
 //Sprawdza czy wartosc podana jako pierwszy argument jest typu podanego w drugim argumencie.
 export const is = (val, type) => {
-  if (!type || !val) throw 'No arg passed to "is" function.';
+  if (type === undefined || val === undefined)
+    throw 'No arg passed to "is" function.';
   type = type[0].toUpperCase() + type.slice(1).toLowerCase();
   const optList = [
     'Object',
@@ -45,7 +47,7 @@ export const is = (val, type) => {
 
 // Zwraca nową instancję zmiennej przesłanej jako argument.
 export const clone = val => {
-  if (!val) throw 'No arg passed to "clone" func.';
+  if (val === undefined) throw 'No arg passed to "clone" func.';
   switch (dataType(val)) {
     case objectType:
       return Object.assign({}, val);
@@ -60,7 +62,7 @@ export const clone = val => {
 
 // Wykonuje głębokie klonowanie zmiennej przesłanej jako argument.
 export const cloneDeep = val => {
-  if (!val) throw 'No arg passed to "cloneDeep" func.';
+  if (val === undefined) throw 'No arg passed to "cloneDeep" func.';
   let newVal = clone(val);
   switch (dataType(newVal)) {
     case objectType:
@@ -87,9 +89,12 @@ export const cloneDeep = val => {
 
 // Porównuje dwie wartosci wysłane w argumentach i jesli są równe wypluwa true. Radzi sobie z prymitywami, tablicami, obiektami i datami.
 export const isEqual = (val1, val2) => {
-  if (!val1 || !val2) throw 'No arg passed to "isEqual" func.';
+  if (val1 === undefined || val2 === undefined)
+    throw new SyntaxError('No arg passed to "isEqual" func.');
   if (dataType(val1) !== dataType(val2))
-    throw 'Arguments passed to isEqual func are different types.';
+    throw new TypeError(
+      'Arguments passed to isEqual func are different types.'
+    );
   if (val1 === val2) {
     return true;
   }
@@ -130,8 +135,10 @@ export const isEqual = (val1, val2) => {
     case dateType:
       if (val1.getTime() === val2.getTime()) return true;
       else return false;
+    case functionType:
+      throw new TypeError('Wrong argument type passed to isEqual func.');
     default:
-      throw 'Wrong argument type passed to isEqual Func';
+      return false;
   }
 };
 
@@ -143,7 +150,12 @@ export const isEqual = (val1, val2) => {
 }; */
 
 const lib = {
-  isObject: (val, config = []) => isObject(val, ...config)
+  dataType: val => dataType(val),
+  isObject: (val, config = []) => isObject(val, ...config),
+  is: (val, type) => is(val, type),
+  clone: val => clone(val),
+  cloneDeep: val => cloneDeep(val),
+  isEqual: (val1, val2) => isEqual(val1, val2)
 };
 
 export default lib;
