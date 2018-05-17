@@ -16,17 +16,27 @@ test('Array in array', t => {
   t.not(cloneDeep(arr), arr);
 });
 
-test('Object in object clone', t => {
+test('Array in object', t => {
+  const obj = { a: [] };
+  t.not(cloneDeep(obj), obj);
+});
+
+test('Object in object', t => {
   const obj = { a: {} };
   t.not(cloneDeep(obj), obj);
 });
 
-test('Object in array clone', t => {
+test('Object in array', t => {
   const arr = [{}];
   t.not(cloneDeep(arr), arr);
 });
 
-test('Array in object clone', t => {
-  const obj = { a: [] };
+test('Object and array in array', t => {
+  const arr = [[], {}];
+  t.not(cloneDeep(arr), arr);
+});
+
+test('Object and array in object', t => {
+  const obj = { arr: [], ob: {} };
   t.not(cloneDeep(obj), obj);
 });

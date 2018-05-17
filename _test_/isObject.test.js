@@ -5,12 +5,28 @@ test('object', t => {
   t.true(isObject({}));
 });
 
+test('object with object and array out', t => {
+  t.false(isObject({}, 'Object', 'Array'));
+});
+
+test('array', t => {
+  t.true(isObject([]));
+});
+
 test('function', t => {
   t.true(isObject(() => {}));
 });
 
+test('function with object and array out', t => {
+  t.true(isObject(() => {}, 'Object', 'Array'));
+});
+
 test('date', t => {
   t.true(isObject(new Date()));
+});
+
+test('date with date out', t => {
+  t.false(isObject(new Date(), 'Date'));
 });
 
 test('null', t => {
