@@ -15,7 +15,9 @@
     "ava": "^1.0.0-beta.4"
   },
   "ava": {
-    "require": ["@babel/register"],
+    "require": [
+      "@babel/register"
+    ],
     "babel": {
       "testOptions": {
         "babelrc": true
