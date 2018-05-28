@@ -1,5 +1,5 @@
 /**
- * @fileOverview Small library which makes handling JavaScript`s object easier
+ * @fileOverview Small library which makes handling JavaScript`s object easier.
  * @author Łukasz Rasiński
  * @version 0.1.2
  */

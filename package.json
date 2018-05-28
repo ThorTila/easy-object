@@ -1,23 +1,33 @@
 {
   "name": "easy-object",
-  "version": "0.0.1",
-  "description": "",
+  "version": "0.1.2",
+  "description":
+    "Small library which makes handling JavaScript`s object easier",
+  "keywords": ["object", "objects", "clone", "deepcloning", "cloning"],
+  "bugs": {
+    "url": "https://github.com/ThorTila/easy-object/issues",
+    "email": "33997787+ThorTila@users.noreply.github.com"
+  },
   "main": "eo.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ThorTila/easy-object"
+  },
   "scripts": {
-    "test": "ava --verbose"
+    "test": "ava --tap | tap-nyan",
+    "testv": "ava --verbose"
   },
   "author": "Łukasz Rasiński",
-  "license": "ISC",
-  "devDependencies": {},
-  "dependencies": {
+  "license": "MIT",
+  "devDependencies": {
+    "tap-nyan": "^1.1.0",
     "@babel/preset-env": "^7.0.0-beta.47",
     "@babel/register": "^7.0.0-beta.47",
     "ava": "^1.0.0-beta.4"
   },
+  "dependencies": {},
   "ava": {
-    "require": [
-      "@babel/register"
-    ],
+    "require": ["@babel/register"],
     "babel": {
       "testOptions": {
         "babelrc": true
