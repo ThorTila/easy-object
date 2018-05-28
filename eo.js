@@ -3,10 +3,6 @@
  * @author Łukasz Rasiński
  * @version 0.1.2
  */
-const objectType = 'object',
-  arrayType = 'array',
-  dateType = 'date',
-  functionType = 'function';
 
 /**
  *  Return type of data passed to function.
@@ -113,11 +109,11 @@ export const isObject = (val, ...config) => {
 export const clone = val => {
   if (val === undefined) throw 'No arg passed to "clone" func.';
   switch (dataType(val)) {
-    case objectType:
+    case 'object':
       return Object.assign({}, val);
-    case arrayType:
+    case 'array':
       return [...val];
-    case dateType:
+    case 'date':
       return new Date(val.valueOf());
     default:
       return val;
@@ -138,19 +134,19 @@ export const cloneDeep = val => {
   if (val === undefined) throw Error('No arg passed to "cloneDeep" func.');
   let newVal = clone(val);
   switch (dataType(newVal)) {
-    case objectType:
+    case 'object':
       for (const prop in newVal) {
         if (
-          dataType(newVal[prop]) === objectType ||
-          dataType(newVal[prop]) === arrayType
+          dataType(newVal[prop]) === 'object' ||
+          dataType(newVal[prop]) === 'array'
         ) {
           newVal[prop] = cloneDeep(newVal[prop]);
         }
       }
       return newVal;
-    case arrayType:
+    case 'array':
       newVal.forEach((el, id) => {
-        if (dataType(el) === objectType || dataType(el) === arrayType) {
+        if (dataType(el) === 'object' || dataType(el) === 'array') {
           newVal[id] = cloneDeep(el);
         }
       });
@@ -184,13 +180,13 @@ export const isEqual = (val1, val2) => {
     return true;
   }
   switch (dataType(val1)) {
-    case objectType:
+    case 'object':
       if (Object.keys(val1).length !== Object.keys(val2).length) return false;
       for (const prop in val1) {
         if (!val2.hasOwnProperty(prop)) return false;
         if (
-          dataType(val1[prop]) === objectType ||
-          dataType(val1[prop]) === arrayType
+          dataType(val1[prop]) === 'object' ||
+          dataType(val1[prop]) === 'array'
         ) {
           if (isEqual(val1[prop], val2[prop])) {
             continue;
@@ -201,13 +197,10 @@ export const isEqual = (val1, val2) => {
         if (val1[prop] !== val2[prop]) return false;
       }
       return true;
-    case arrayType:
+    case 'array':
       if (val1.length !== val2.length) return false;
       for (let i = 0; i < val1.length; i++) {
-        if (
-          dataType(val1[i]) === objectType ||
-          dataType(val1[i]) === arrayType
-        ) {
+        if (dataType(val1[i]) === 'object' || dataType(val1[i]) === 'array') {
           if (isEqual(val1[i], val2[i])) {
             continue;
           } else {
@@ -217,10 +210,10 @@ export const isEqual = (val1, val2) => {
         if (val1[i] !== val2[i]) return false;
       }
       return true;
-    case dateType:
+    case 'date':
       if (val1.getTime() === val2.getTime()) return true;
       else return false;
-    case functionType:
+    case 'function':
       throw new TypeError('Wrong argument type passed to isEqual func.');
     default:
       return false;
