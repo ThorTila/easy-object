@@ -1,6 +1,79 @@
 import test from 'ava';
 import eo from '../eo';
 
+test('dataType: array with no opt', t => {
+  const arr = [];
+  t.is(eo.dataType(arr), 'array');
+});
+
+test('dataType: array with opt', t => {
+  const arr = [];
+  t.is(eo.dataType(arr, false), 'Array');
+});
+
+test('dataType: object', t => {
+  const obj = {};
+  t.is(eo.dataType(obj), 'object');
+});
+
+test('dataType: date', t => {
+  const dat = new Date();
+  t.is(eo.dataType(dat), 'date');
+});
+test('dataType: function', t => {
+  const func = () => {};
+  t.is(eo.dataType(func), 'function');
+});
+test('dataType: number', t => {
+  const num = 5;
+  t.is(eo.dataType(num), 'number');
+});
+
+test('dataType: string', t => {
+  const str = 'test';
+  t.is(eo.dataType(str), 'string');
+});
+
+test('dataType: primitive boolean', t => {
+  const bool = false;
+  t.is(eo.dataType(bool), 'boolean');
+});
+
+test('dataType: object boolean', t => {
+  const bool = new Boolean();
+  t.is(eo.dataType(bool), 'boolean');
+});
+
+test('dataType: error', t => {
+  const err = new Error();
+  t.is(eo.dataType(err), 'error');
+});
+
+test('dataType: math', t => {
+  const math = Math;
+  t.is(eo.dataType(math), 'math');
+});
+
+test('dataType: JSON', t => {
+  const json = JSON;
+  t.is(eo.dataType(json), 'json');
+});
+
+test('dataType: wrong second argument', t => {
+  const error = t.throws(() => {
+    eo.dataType(() => {}, 'true');
+  }, TypeError);
+  t.is(
+    error.message,
+    'Wrong second argument type passed to "dataType" function. Argument must be boolean.'
+  );
+});
+
+test('dataType: regular expression with opt', t => {
+  const regex = /a/;
+  t.is(eo.dataType(regex, false), 'RegExp');
+});
+
 test('clone array whole lib', t => {
   const arr = [];
   t.not(eo.clone(arr), arr);
