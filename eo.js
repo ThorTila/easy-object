@@ -1,7 +1,7 @@
 /**
  * @fileOverview Small library which makes handling JavaScript`s object easier
  * @author Łukasz Rasiński
- * @version 0.1.0
+ * @version 0.1.2
  */
 const objectType = 'object',
   arrayType = 'array',
@@ -9,16 +9,29 @@ const objectType = 'object',
   functionType = 'function';
 
 /**
- *  Return type of data passed to this function.
+ *  Return type of data passed to function.
  * @param {*} data Data passed to function.
- * @returns {string}  Data type in lower case.
- * @example Example usage
- * dataType({a:1,b:2}) //'object'
+ * @param {boolean} [lowerCase = true] Option to configure if function return lower cased string or not.
+ * @returns {string}  Data type.
+ * @throws {TypeError} When you passed other than boolean value as a second argument.
+ * @example
+ * //without options
+ * dataType({a:1,b:2}); //'object'
+ *
+ * //with option
+ * dataType({a:1,b:2}, false); //'Object'
  */
-export const dataType = data => {
-  const type = Object.prototype.toString.call(data),
-    reg = /\W/;
-  return type.split(reg)[2].toLowerCase();
+export const dataType = (data, lowerCase = true) => {
+  if (lowerCase !== true && lowerCase !== false)
+    throw TypeError(
+      'Wrong second argument type passed to "dataType" function. Argument must be boolean.'
+    );
+  const type = Object.prototype.toString
+    .call(data)
+    .split(/\W/)
+    .filter(Boolean)[1];
+  if (lowerCase) return type.toLowerCase();
+  else return type;
 };
 
 /**
@@ -26,7 +39,7 @@ export const dataType = data => {
  * @param {*} val Value passed to a function
  * @param {string} type Type you want to check
  * @returns {boolean} Is value a selected type
- * @throws {Error} When you didn`t passed second argument or you passed wrong second argument.
+ * @throws {Error} When you didn`t pass second argument or you passed wrong second argument.
  * @example Example usage
  * //false
  * let obj = {a:1.b:2};
@@ -220,13 +233,19 @@ export const isEqual = (val1, val2) => {
  */
 const eo = {
   /**
-   *  Return type of data passed to this function.
+   *  Return type of data passed to function.
    * @param {*} data Data passed to function.
-   * @returns {string}  Data type in lower case.
-   * @example Example usage
+   * @param {boolean} [lowerCase = true] Option to configure if function return lower cased string or not.
+   * @returns {string}  Data type.
+   * @throws {TypeError} When you passed other than boolean value as a second argument.
+   * @example
+   * //without options
    * eo.dataType([1,2,3]); //'array'
+   *
+   * //with option
+   * eo.dataType([1,2,3], false); //'Array'
    */
-  dataType: data => dataType(data),
+  dataType: (data, lowerCase = true) => dataType(data, lowerCase),
   /**
    *  Check if passed value is an object and returns true if is. Use {@link is} function.
    * @param {*} val Value passed to a function
