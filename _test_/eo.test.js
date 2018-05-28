@@ -1,6 +1,29 @@
 import test from 'ava';
 import eo from '../eo';
 
+test('dataType: array', t => {
+  const arr = [];
+  t.is(eo.dataType(arr), 'array');
+});
+
+test('dataType: object', t => {
+  const obj = {};
+  t.is(eo.dataType(obj), 'object');
+});
+
+test('dataType: date', t => {
+  const dat = new Date();
+  t.is(eo.dataType(dat), 'date');
+});
+test('dataType: function', t => {
+  const func = () => {};
+  t.is(eo.dataType(func), 'function');
+});
+test('dataType: number', t => {
+  const num = 5;
+  t.is(eo.dataType(num), 'number');
+});
+
 test('clone array whole lib', t => {
   const arr = [];
   t.not(eo.clone(arr), arr);

@@ -3,22 +3,61 @@
  * @author Łukasz Rasiński
  * @version 0.1.0
  */
-const objectType = '[object Object]',
-  arrayType = '[object Array]',
-  dateType = '[object Date]',
-  functionType = '[object Function]';
+const objectType = 'object',
+  arrayType = 'array',
+  dateType = 'date',
+  functionType = 'function';
 
 /**
- *  Return type of data passed to this function in format: [object Type].
- * @param {*} data Data passed to function
- * @returns {string}  Data type
+ *  Return type of data passed to this function.
+ * @param {*} data Data passed to function.
+ * @returns {string}  Data type in lower case.
  * @example Example usage
- * // '[object Object];
- * dataType({a:1,b:2})
- * @todo Return data type name
+ * dataType({a:1,b:2}) //'object'
  */
 export const dataType = data => {
-  return Object.prototype.toString.call(data);
+  const type = Object.prototype.toString.call(data),
+    reg = /\W/;
+  return type.split(reg)[2].toLowerCase();
+};
+
+/**
+ *  Check if passed value is of selected type and returns true if is.
+ * @param {*} val Value passed to a function
+ * @param {string} type Type you want to check
+ * @returns {boolean} Is value a selected type
+ * @throws {Error} When you didn`t passed second argument or you passed wrong second argument.
+ * @example Example usage
+ * //false
+ * let obj = {a:1.b:2};
+ * is(obj, 'array');
+ */
+export const is = (val, type) => {
+  if (type === undefined) throw Error('No arg passed to "is" function.');
+  type = type.toLowerCase();
+  /**
+   * List of all available types to check by function {@link is}
+   * @type {string[]}
+   */
+  const optList = [
+    'object',
+    'array',
+    'function',
+    'date',
+    'regexp',
+    'string',
+    'number',
+    'boolean',
+    'error',
+    'math',
+    'json',
+    'arguments'
+  ];
+  if (!optList.includes(type))
+    throw Error(
+      `Wrong argument "${type}" passed to "is" function. Available arguments: "${optList}"`
+    );
+  return dataType(val) === `${type}`;
 };
 
 /**
@@ -45,45 +84,6 @@ export const isObject = (val, ...config) => {
   } else {
     return val === Object(val);
   }
-};
-
-/**
- *  Check if passed value is of selected type and returns true if is.
- * @param {*} val Value passed to a function
- * @param {string} type Type you want to check
- * @returns {boolean} Is value a selected type
- * @throws {Error} When you didn`t passed second argument or you passed wrong second argument.
- * @example Example usage
- * //false
- * let obj = {a:1.b:2};
- * is(obj, 'array');
- */
-export const is = (val, type) => {
-  if (type === undefined) throw Error('No arg passed to "is" function.');
-  type = type[0].toUpperCase() + type.slice(1).toLowerCase();
-  /**
-   * List of all available types to check by function {@link is}
-   * @type {string[]}
-   */
-  const optList = [
-    'Object',
-    'Array',
-    'Function',
-    'Date',
-    'RegExp',
-    'String',
-    'Number',
-    'Boolean',
-    'Error',
-    'Math',
-    'JSON',
-    'Arguments'
-  ];
-  if (!optList.includes(type))
-    throw Error(
-      `Wrong argument "${type}" passed to "is" function. Available arguments: "${optList}"`
-    );
-  return dataType(val) === `[object ${type}]`;
 };
 
 /**
@@ -220,13 +220,11 @@ export const isEqual = (val1, val2) => {
  */
 const eo = {
   /**
-   *  Return type of data passed to this function in format: [object Type].
-   * @param {*} data Data passed to function
-   * @returns {string}  Data type
+   *  Return type of data passed to this function.
+   * @param {*} data Data passed to function.
+   * @returns {string}  Data type in lower case.
    * @example Example usage
-   * // '[object Array]'
-   * eo.dataType([1,2,3]);
-   * @todo Return data type name
+   * eo.dataType([1,2,3]); //'array'
    */
   dataType: data => dataType(data),
   /**
